@@ -2,7 +2,6 @@ package cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.contr
 
 import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.model.domain.Fruita;
 import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.model.repository.FruitaRepository;
-import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.model.services.FruitaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
