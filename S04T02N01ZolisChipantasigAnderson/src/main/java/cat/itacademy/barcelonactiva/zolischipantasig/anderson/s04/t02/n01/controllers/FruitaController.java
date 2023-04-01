@@ -1,22 +1,84 @@
 package cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.controllers;
 
+import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.model.domain.Fruita;
+import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.model.repository.FruitaRepository;
+import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n01.model.services.FruitaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/")
+@RequestMapping("/fruita")
 public class FruitaController {
 
-    @GetMapping("/HelloWorld")
-    public String saluda(@RequestParam(defaultValue = "UNKNOWN") String nom) {
-        return "Hello, " + nom + ". You are running a Maven project.";
+    @Autowired
+    private FruitaRepository fruitaRepository;
+
+    @PostMapping("/add")
+    public ResponseEntity<Fruita> addFruita(@RequestBody Fruita newfruita) {
+        try {
+            Fruita savedFruit = fruitaRepository.save(new Fruita(newfruita.getId(), newfruita.getNom(), newfruita.getQuantitatQuilos()));
+            return new ResponseEntity<>(savedFruit, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @GetMapping(value = {"/HelloWorld2" , "/HelloWorld2/{nom}"})
-    public String saluda2(@PathVariable(required = false) String nom) {
-        if (nom == null) {
-            return "Hello, You are running a Maven project.";
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Fruita> updateFruita(@PathVariable("id") int id, @RequestBody Fruita fruitaToUpdate) {
+        Optional<Fruita> fruitData = fruitaRepository.findById(id);
+
+        if (fruitData.isPresent()) {
+            Fruita fruitFromDb = fruitData.get();
+            fruitFromDb.setNom(fruitaToUpdate.getNom());
+            fruitFromDb.setQuantitatQuilos(fruitaToUpdate.getQuantitatQuilos());
+            return new ResponseEntity<>(fruitaRepository.save(fruitFromDb), HttpStatus.OK);
         } else {
-            return "Hello, " + nom + ". You are running a Maven project.";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteFruita(@PathVariable("id") int id) {
+        Optional<Fruita> fruitData = fruitaRepository.findById(id);
+        if (fruitData.isPresent()) {
+            try {
+                fruitaRepository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<Fruita> getFruitaById(@PathVariable("id") int id) {
+        Optional<Fruita> fruitData = fruitaRepository.findById(id);
+
+        if (fruitData.isPresent()) {
+            return new ResponseEntity<>(fruitData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Fruita>> getAllFruites() {
+        try {
+            List<Fruita> fruits = fruitaRepository.findAll();
+            if (!fruits.isEmpty()) {
+                return new ResponseEntity<>(fruits, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
