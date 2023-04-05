@@ -1,83 +1,82 @@
 package cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.controllers;
 
+import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model.Dto.Message;
+import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model.Dto.FruitaDto;
 import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model.domain.Fruita;
-import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model.repository.FruitaRepository;
+import cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model.services.FruitaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
+
 @RestController
 @RequestMapping("/fruita")
 public class FruitaController {
 
     @Autowired
-    private FruitaRepository fruitaRepository;
+    private FruitaService fruitaServices;
 
+    //add a new user
     @PostMapping("/add")
-    public ResponseEntity<Fruita> addFruita(@RequestBody Fruita newfruita) {
-        try {
-            Fruita savedFruit = fruitaRepository.save(new Fruita(newfruita.getId(), newfruita.getNom(), newfruita.getQuantitatQuilos()));
-            return new ResponseEntity<>(savedFruit, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public ResponseEntity<Message> addFruita(@RequestBody FruitaDto fruitaDto) {
+        ResponseEntity<Message> validationResult = fruitaServices.validateFruitDto(fruitaDto);
+
+        if (validationResult.getStatusCode() == HttpStatus.OK) {
+            fruitaServices.createFruit(fruitaDto);
+            return new ResponseEntity<>(new Message("Fruit created correctly."), HttpStatus.CREATED);
+        } else {
+            return validationResult;
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Fruita> updateFruita(@PathVariable("id") int id, @RequestBody Fruita fruitaToUpdate) {
-        Optional<Fruita> fruitData = fruitaRepository.findById(id);
+    public ResponseEntity<Message> updateFruita(@PathVariable int id, @RequestBody FruitaDto fruitDto) {
+        ResponseEntity<Message> checkId = fruitaServices.validateFruitId(id);
 
-        if (fruitData.isPresent()) {
-            Fruita fruitFromDb = fruitData.get();
-            fruitFromDb.setNom(fruitaToUpdate.getNom());
-            fruitFromDb.setQuantitatQuilos(fruitaToUpdate.getQuantitatQuilos());
-            return new ResponseEntity<>(fruitaRepository.save(fruitFromDb), HttpStatus.OK);
+        if (checkId.getStatusCode() == HttpStatus.OK) {
+            fruitaServices.updateFruitById(id, fruitDto);
+            return new ResponseEntity<>(new Message("Fruit updated."), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return checkId;
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteFruita(@PathVariable("id") int id) {
-        Optional<Fruita> fruitData = fruitaRepository.findById(id);
-        if (fruitData.isPresent()) {
-            try {
-                fruitaRepository.deleteById(id);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<Message> deleteFruita(@PathVariable int id) {
+        ResponseEntity<Message> checkId = fruitaServices.validateFruitId(id);
+
+        if (checkId.getStatusCode() == HttpStatus.OK) {
+            fruitaServices.deleteFruitById(id);
+            return new ResponseEntity<>(new Message("Fruit removed."), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return checkId;
         }
     }
 
+    // read an user
     @GetMapping("/getOne/{id}")
-    public ResponseEntity<Fruita> getFruitaById(@PathVariable("id") int id) {
-        Optional<Fruita> fruitData = fruitaRepository.findById(id);
+    public ResponseEntity<?> getFruitaById(@PathVariable int id) {
+        ResponseEntity<Message> checkId = fruitaServices.validateFruitId(id);
 
-        if (fruitData.isPresent()) {
-            return new ResponseEntity<>(fruitData.get(), HttpStatus.OK);
+        if (checkId.getStatusCode() == HttpStatus.OK) {
+            return new ResponseEntity<>(fruitaServices.getFruitById(id), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return checkId;
         }
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<Fruita>> getAllFruites() {
-        try {
-            List<Fruita> fruits = fruitaRepository.findAll();
-            if (!fruits.isEmpty()) {
-                return new ResponseEntity<>(fruits, HttpStatus.OK);
-            }
+
+        List<Fruita> fruits = fruitaServices.fruitsList();
+        if (!fruits.isEmpty()) {
+            return new ResponseEntity<>(fruits, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
     }
 }

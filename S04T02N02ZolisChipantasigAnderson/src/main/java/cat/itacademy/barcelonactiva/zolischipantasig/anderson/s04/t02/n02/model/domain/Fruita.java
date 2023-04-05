@@ -2,14 +2,16 @@ package cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model
 
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "fruita")
-public class Fruita {
+public class Fruita implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "nom")
@@ -26,6 +28,12 @@ public class Fruita {
         this.nom = nom;
         this.quantitatQuilos = quantitatQuilos;
     }
+
+    public Fruita(String nom, int quantitatQuilos) {
+        this.nom = nom;
+        this.quantitatQuilos = quantitatQuilos;
+    }
+
 
     // Getters
     public int getId() {
