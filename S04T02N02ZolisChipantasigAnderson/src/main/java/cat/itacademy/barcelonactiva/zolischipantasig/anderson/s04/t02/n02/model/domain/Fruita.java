@@ -2,13 +2,16 @@ package cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model
 
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
-import java.util.Objects;
+import java.lang.Object;
 
 @Entity
 @Table(name = "fruita")
 public class Fruita implements Serializable {
+
+    /*
+    Entity: Package where the class that represents the database table is created.
+     */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +26,10 @@ public class Fruita implements Serializable {
 
     public Fruita (){}
 
-    public Fruita(int id, String nom, int quantitatQuilos) {
-        this.id = id;
-        this.nom = nom;
-        this.quantitatQuilos = quantitatQuilos;
-    }
-
     public Fruita(String nom, int quantitatQuilos) {
         this.nom = nom;
         this.quantitatQuilos = quantitatQuilos;
     }
-
 
     // Getters
     public int getId() {
@@ -64,17 +60,6 @@ public class Fruita implements Serializable {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Fruita fruita)) return false;
-        return id == fruita.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     @Override
     public String toString() {

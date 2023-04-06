@@ -4,19 +4,14 @@ package cat.itacademy.barcelonactiva.zolischipantasig.anderson.s04.t02.n02.model
  * Data transfer object between the client and the server.
  */
 
-
 public class FruitaDto {
 
     private String nom;
-
     private int quantitatQuilos;
-
     public FruitaDto() {
     }
-
     public FruitaDto(String nom, int quantitatQuilos) {
         this.nom = nom;
-
         this.quantitatQuilos = quantitatQuilos;
     }
 
@@ -24,15 +19,15 @@ public class FruitaDto {
         return nom;
     }
 
+    public int getQuantitatQuilos() {
+        return quantitatQuilos;
+    }
+
     public void setNom(String nom) {
         this.nom = nom;
     }
 
-    public int getQuantityKg() {
-        return quantitatQuilos;
-    }
-
-    public void setQuantityKg(int quantitatQuilos) {
+    public void setQuantitatQuilos(int quantitatQuilos) {
         this.quantitatQuilos = quantitatQuilos;
     }
 

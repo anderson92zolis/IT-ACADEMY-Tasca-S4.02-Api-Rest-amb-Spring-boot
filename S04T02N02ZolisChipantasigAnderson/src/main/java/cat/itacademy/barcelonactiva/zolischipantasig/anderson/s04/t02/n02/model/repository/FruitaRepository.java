@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
  * To manage persistence with the database.
  */
 
-
 @Repository
 public interface FruitaRepository extends JpaRepository<Fruita, Integer> {
+
+    /*
+     * repository: Package in which the class is created whose particularity is that it extends JpaRepository which allows us to manage the fundamental CRUD operations.
+     */
 }
