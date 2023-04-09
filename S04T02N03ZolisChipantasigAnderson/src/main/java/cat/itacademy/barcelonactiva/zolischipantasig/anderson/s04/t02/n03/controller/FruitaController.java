@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController()
+@RequestMapping("/fruita")
 public class FruitaController {
 
     @Autowired
@@ -18,7 +19,7 @@ public class FruitaController {
     @PostMapping("/add")
     public String saveBook(@RequestBody Fruita fruita) {
         fruitaRepository.save(fruita);
-        return "Added fruit! "+fruita.getNom();
+        return "Added fruit! "+fruita.toString();
     }
 
     @GetMapping("/getAll")

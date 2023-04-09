@@ -11,8 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 @Data
 @NoArgsConstructor
-
-
 @Document(collection = "fruita")
 public class Fruita {
     @Id
@@ -37,5 +35,15 @@ public class Fruita {
 
     public int getQuantitatQuilos() {
         return quantitatQuilos;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Fruita{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", quantitatQuilos=" + quantitatQuilos +
+                '}';
     }
 }
