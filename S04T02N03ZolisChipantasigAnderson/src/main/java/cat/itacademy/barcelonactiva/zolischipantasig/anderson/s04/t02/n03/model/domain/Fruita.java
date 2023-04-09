@@ -37,6 +37,20 @@ public class Fruita {
         return quantitatQuilos;
     }
 
+    // setters
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setQuantitatQuilos(int quantitatQuilos) {
+        this.quantitatQuilos = quantitatQuilos;
+    }
 
     @Override
     public String toString() {
