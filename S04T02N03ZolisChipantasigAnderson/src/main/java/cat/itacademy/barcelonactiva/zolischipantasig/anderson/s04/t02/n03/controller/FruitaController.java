@@ -18,12 +18,6 @@ public class FruitaController {
     @Autowired
     private FruitaService fruitaService;
 
-    /*@PostMapping("/add")
-    public ResponseEntity<Fruita> createFruita(@RequestBody Fruita fruita) {
-        System.out.println("Creating new fruit with name " + fruita.getNom() + " and  weight Kg  " + fruita.getQuantitatQuilos() + ".");
-        Fruita savedFruita = fruitaService.createFruita(fruita);
-        return new ResponseEntity<>(savedFruita, HttpStatus.CREATED);
-    }*/
 
     @PostMapping("/add")
     public ResponseEntity<?> createFruita(@RequestBody Fruita fruita) {
@@ -38,16 +32,6 @@ public class FruitaController {
         }
     }
 
-    /*
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Fruita> updateFruita(@PathVariable int id, @RequestBody Fruita fruita) {
-        Optional<Fruita> fruitaOptional = fruitaService.updateFruita(id, fruita);
-        if (fruitaOptional.isPresent()) {
-            return new ResponseEntity<>(fruitaOptional.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }    */
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateFruita(@PathVariable int id, @RequestBody Fruita fruita) {
@@ -62,13 +46,6 @@ public class FruitaController {
         }
     }
 
-    /*
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteFruita(@PathVariable int id) {
-        System.out.println("Deleting fruit with ID " + id + " from the database.");
-        fruitaService.deleteFruita(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }*/
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteFruita(@PathVariable int id) {
@@ -87,16 +64,6 @@ public class FruitaController {
         }
     }
 
-    /*
-    @GetMapping("/getOne/{id}")
-    public ResponseEntity<Fruita> getFruitaById(@PathVariable int id) {
-        Optional<Fruita> fruitaOptional = fruitaService.getFruitaById(id);
-        if (fruitaOptional.isPresent()) {
-            return new ResponseEntity<>(fruitaOptional.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }    */
 
     @GetMapping("/getOne/{id}")
     public ResponseEntity<?> getFruitaById(@PathVariable int id) {
