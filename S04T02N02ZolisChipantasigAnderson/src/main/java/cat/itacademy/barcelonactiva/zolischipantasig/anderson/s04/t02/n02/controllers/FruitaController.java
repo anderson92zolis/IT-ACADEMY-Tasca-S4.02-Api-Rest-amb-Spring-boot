@@ -45,7 +45,7 @@ public class FruitaController {
     public ResponseEntity<Message> updateFruita(@PathVariable int id, @RequestBody FruitaDto fruitaDto) {
         Optional<Fruita> fruita = fruitaServices.getFruitaById(id);
         if (fruita.isPresent()) {
-            Fruita updatedFruita = fruitaServices.updateFruitaById(id, fruitaDto);
+            fruitaServices.updateFruitaById(id, fruitaDto);
             return new ResponseEntity<>(new Message("Fruit with ID " + id + " updated."), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new Message("Fruit with ID " + id + " not found."), HttpStatus.NOT_FOUND);
